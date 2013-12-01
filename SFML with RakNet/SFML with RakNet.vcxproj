@@ -360,6 +360,7 @@
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\WSAStartupSingleton.h" />
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.h" />
+    <ClInclude Include="serverclient.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Libraries\RakNet_PC-4.037\Source\CMakeLists.txt" />

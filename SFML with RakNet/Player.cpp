@@ -12,6 +12,11 @@ private:
 		float x,y;
 	};
 	position currentPos;
+
+	sf::Clock clock;
+	sf::Texture texture;
+	sf::Sprite playerSprite;
+
 public:
 	Player(){
 		spritePath = "Images/Lloyd.png";
@@ -28,7 +33,15 @@ public:
 	}
 	void setName(std::string _name) { name = _name;}
 	std::string getName() { std::cout << "returning the name: " << name << std::endl; return name;}
-	void draw(){}
+	void draw(sf::RenderWindow &window){
+		int x = 1,y = 0;
+			sf::IntRect test(0+24*x,0+32*y,24,32);
+			if( clock.getElapsedTime().asMilliseconds() > 450){
+				clock.restart();
+				x = x < 2? x+1:0;
+			}
+			//playerSprite.setTextureRect(test);
+	}
 	position getPosition(){
 		return currentPos;
 	}

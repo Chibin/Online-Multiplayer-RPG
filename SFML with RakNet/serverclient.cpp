@@ -1,3 +1,11 @@
+#ifndef __SERVERCLIENT__
+#define __SERVERCLIENT__
+#include "serverclient.h"
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+
 #include "RakPeerInterface.h"
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
@@ -5,19 +13,11 @@
 #include "packetManager.cpp"
 #include "Player.cpp"
 #include "ServerDataContainer.cpp"
-#include <vector>
-#include <iostream>
-#include <string>
-
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
 
 #define MAX_CLIENTS 10
 #define SERVER_PORT 60000
 using namespace RakNet;
-
+char keypressToChar(sf::Keyboard::Key keypressed, bool isShiftPressed=false);
 class serverclient{
 public:
 	RakNet::RakPeerInterface *peer;
@@ -36,7 +36,22 @@ private:
 	packetManager packet_manager;
 	Player* player;
 	ServerDataContainer* serverData; //Should only 1 that exist
+	//From main 
+	bool isUp,isDown,isLeft,isRight, repeat, isShiftDown, isChatting;
+	sf::Font font;
+	sf::Text chatText;
+	sf::Text sentText;
+	sf::Text chatCheck;
 	void serverclientInit(){
+		isUp = isDown = isLeft = isRight = isShiftDown = isChatting = false;
+		repeat = true;
+		if (!font.loadFromFile("Book Antiqua.ttf"))
+			std::exit(0);
+		chatText.setFont(font); chatText.setCharacterSize(25); chatText.setString("");
+		sentText.setFont(font); sentText.setCharacterSize(25); sentText.setString("");
+		chatCheck.setFont(font); chatCheck.setCharacterSize(17); chatCheck.setString("Chat: off");
+		chatCheck.setPosition(0,550);
+		chatText.setPosition(0,565);
 		printf("(C) or (S)erver?\n");
 		gets(str);
 		if ((str[0]=='c')||(str[0]=='C'))
@@ -67,6 +82,44 @@ public:
 		peer = RakNet::RakPeerInterface::GetInstance();
 		serverclientInit();
 	}
+	char keypressToChar(sf::Keyboard::Key keypressed, bool isShiftPressed=false){
+	if( keypressed >= 0 && keypressed <=25)
+		return isShiftPressed?(char)(keypressed+65):(char)(keypressed+97);
+	else if ( keypressed >= 26 && keypressed <= 35)
+		if (isShiftPressed){
+			switch (keypressed){
+				case 27: return '!';
+				case 28: return '@';
+				case 29: return '#';
+				case 30: return '$';
+				case 31: return '%';
+				case 32: return '^';
+				case 33: return '&';
+				case 34: return '*';
+				case 35: return '(';
+				case 26: return ')';
+			}
+			return keypressed;
+		}
+		else
+			return (char)(keypressed+22);
+	else if (keypressed == sf::Keyboard::Add)
+		return '+';
+	else if ((keypressed == sf::Keyboard::Subtract) || (keypressed == 56))
+		return '-';
+	else if (keypressed == sf::Keyboard::Space)
+		return ' ';
+	else if ( keypressed == sf::Keyboard::Period)
+		return isShiftPressed? '>': '.'; 
+	else if ( keypressed == 51 )
+		return isShiftPressed? '"': '\'';  
+	else if ( keypressed == 48 )
+		return isShiftPressed? ':': ';';
+	else{
+		std::cout << keypressed << std::endl;
+		return keypressed;
+	}
+}
 	void setChatlog(){
 		if(chatlog != NULL && (!isServer))
 			packet_manager.getClientPacketHandler()->setChatlog(chatlog);
@@ -86,12 +139,68 @@ public:
 				peer->Connect(str, SERVER_PORT, 0,0);
 			}
 		}
-		bool getIsServer(){ return isServer;}
+	bool getIsServer(){ return isServer;}
 
 	void drawManager(sf::RenderWindow &window){
 		//std::cout << player->getName() << std::endl;
+		if(player != NULL){
+			player->draw(window);
+		}
 	}
-
+	void inputHandler(sf::Event &event, sf::RenderWindow &window){
+		int y;
+		if (event.type == sf::Event::KeyReleased){
+			if (event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::RShift)	isShiftDown = false;
+			if(event.key.code == sf::Keyboard::Up)	isUp = false;
+			if(event.key.code == sf::Keyboard::Down)	isDown = false;
+			if(event.key.code == sf::Keyboard::Left)	isLeft = false;
+			if(event.key.code == sf::Keyboard::Right)	isRight = false;
+		}
+		if (event.type == sf::Event::KeyPressed){
+			window.setKeyRepeatEnabled(repeat);
+			if (event.key.code == sf::Keyboard::Return){
+				window.setKeyRepeatEnabled(!repeat);
+				isChatting = !isChatting;
+				if (isChatting){ chatCheck.setString("Chat: on"); 	}
+				else{
+					chatCheck.setString("Chat: off");
+					sentText.setString(chatText.getString());
+					// Sending the message in Broadcast to all the clients connected
+					BitStream bsOut;
+					bsOut.Write((RakNet::MessageID)ID_GAME_MESSAGE_1);
+					bsOut.Write(chatText.getString().toAnsiString().c_str());
+					peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,RakNet::UNASSIGNED_SYSTEM_ADDRESS,true);	
+					chatText.setString(std::string(""));
+				}
+			}
+			else if (event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::RShift){  isShiftDown = true;	}
+			else if (event.key.code == sf::Keyboard::BackSpace){
+				std::string newChatText = chatText.getString();
+				if (newChatText.size() > 0) newChatText.resize(newChatText.size()-1);
+				chatText.setString(newChatText);
+			}
+			else if (event.key.code == sf::Keyboard::Escape){ window.close(); }
+			else if (isChatting){
+				std::string newChatText = chatText.getString();
+				newChatText += keypressToChar(event.key.code, isShiftDown);
+				chatText.setString(newChatText);
+			}
+			else if(event.key.code == sf::Keyboard::Up){	 y = 0;	isUp = true;	}
+			else if(event.key.code == sf::Keyboard::Down){ y = 2;	isDown = true;}
+			else if(event.key.code == sf::Keyboard::Left){ isLeft = true; y = 3;	}
+			else if(event.key.code == sf::Keyboard::Right){ isRight = true;  y = 1; }
+			std::cout << event.type << " " <<keypressToChar(event.key.code) << std::endl;
+		}
+		//-----------
+		//character calculations: Request to move the character
+		//------------
+		if(isUp || isDown || isLeft || isRight) {//player.move(0,-3);
+			BitStream bsOut;
+			bsOut.Write((RakNet::MessageID)REQUEST_FOR_PLAYER_TO_MOVE);
+			bsOut.Write(isUp); bsOut.Write(isDown); bsOut.Write(isLeft); bsOut.Write(isRight);
+			peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,RakNet::UNASSIGNED_SYSTEM_ADDRESS,true);	
+		}
+	}
 	void packetManager(){
 			RakNet::Packet *packet = NULL;
 			packet = peer->Receive();
@@ -109,3 +218,4 @@ public:
 			}
 	}
 };
+#endif

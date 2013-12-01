@@ -78,6 +78,16 @@ class serverPacketHandler : public packetHandler{
 						peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,receivedPacket->systemAddress,false);	
 					}
 					break;
+				case REQUEST_FOR_PLAYER_TO_MOVE:
+					{
+						RakNet::RakString rs;
+						RakNet::BitStream bsIn(receivedPacket->data,receivedPacket->length,false);
+						bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+						//Order: up down left right
+						bool up, down, left, right;
+						bsIn.Read(up); bsIn.Read(down); bsIn.Read(left); bsIn.Read(right); 
+					}
+					break;
 				default:
 					printf("Message with identifier %i has arrived.\n", receivedPacket->data[0]);
 					//default

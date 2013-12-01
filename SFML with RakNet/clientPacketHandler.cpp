@@ -86,7 +86,11 @@ class clientPacketHandler : public packetHandler{
 						bsIn.Read(rs);
 						std::cout << "I Successfully received my character " << rs.C_String() << " !" << std::endl;
 						bsIn.Read(rs);
-						std::cout << "Image path is  " << rs.C_String() << " !" << std::endl;
+						printf("Image path is %s!\n",rs.C_String());
+					}
+					break;
+				case UPDATE_PLAYER_POSITION:
+					{
 					}
 					break;
 				default:
