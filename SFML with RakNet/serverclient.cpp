@@ -197,6 +197,10 @@ public:
 		if(isUp || isDown || isLeft || isRight) {//player.move(0,-3);
 			BitStream bsOut;
 			bsOut.Write((RakNet::MessageID)REQUEST_FOR_PLAYER_TO_MOVE);
+			std::string playerName = player->getName().c_str();
+			unsigned short strlength = (unsigned short)strlen(playerName.c_str());
+			bsOut.Write(strlength);
+			bsOut.Write(playerName.c_str(),strlength);
 			bsOut.Write(isUp); bsOut.Write(isDown); bsOut.Write(isLeft); bsOut.Write(isRight);
 			peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,RakNet::UNASSIGNED_SYSTEM_ADDRESS,true);	
 		}

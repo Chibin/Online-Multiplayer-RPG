@@ -73,16 +73,14 @@ int main()
 			if (event.type == sf::Event::KeyPressed){
 				window.setKeyRepeatEnabled(repeat);
 				if (event.type == sf::Event::Closed) window.close();
-			
 			}
 		}
 		//------------
 		// Client stuff for drawing
 		//------------
-		if(!isServer) user->drawManager(window);
-
 		if(!isServer){
 			window.clear();
+			user->drawManager(window);
 			window.draw(chatCheck);
 			if(chatLog.size() > 0)
 				sentText.setString(chatLog[chatLog.size()-1]);
@@ -94,8 +92,7 @@ int main()
 		//		x = x < 2? x+1:0;
 	//		}
 	//		player.setTextureRect(test);
-			if(!isServer) user->drawManager(window);
-			window.draw(player);
+			//window.draw(player);
 			window.display();
 		}
 	}

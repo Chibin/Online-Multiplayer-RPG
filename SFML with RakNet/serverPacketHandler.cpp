@@ -85,7 +85,24 @@ class serverPacketHandler : public packetHandler{
 						bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 						//Order: up down left right
 						bool up, down, left, right;
-						bsIn.Read(up); bsIn.Read(down); bsIn.Read(left); bsIn.Read(right); 
+						unsigned short strlength;
+						char* playerName;
+						bsIn.Read(strlength); bsIn.Read(playerName,strlength); bsIn.Read(up); bsIn.Read(down); bsIn.Read(left); bsIn.Read(right); 
+						printf("test %s!!!\n",playerName);
+						Player *modifyPlayer = serverData->getPlayer(playerName);
+						if(modifyPlayer != NULL){
+							if(up) { printf("UP"); modifyPlayer->move(0,-3);}
+							if(down) { printf("down");modifyPlayer->move(0,3);}
+							if(left) { printf("left");modifyPlayer->move(-3,-0);}
+							if(right) { printf("right");modifyPlayer->move(3,0);}
+							printf("%f %f\n",modifyPlayer->getPosition().x,modifyPlayer->getPosition().y);
+							//Sending an update of player position
+							RakNet::BitStream bsOut;
+							bsOut.Write((RakNet::MessageID)UPDATE_PLAYER_POSITION);
+							bsOut.Write((float)modifyPlayer->getPosition().x);
+							bsOut.Write((float)modifyPlayer->getPosition().y);
+							peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,receivedPacket->systemAddress,false);	
+						}
 					}
 					break;
 				default:

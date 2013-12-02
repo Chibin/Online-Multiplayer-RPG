@@ -87,10 +87,18 @@ class clientPacketHandler : public packetHandler{
 						std::cout << "I Successfully received my character " << rs.C_String() << " !" << std::endl;
 						bsIn.Read(rs);
 						printf("Image path is %s!\n",rs.C_String());
+						player->loadTexture(rs.C_String());
 					}
 					break;
 				case UPDATE_PLAYER_POSITION:
 					{
+						printf("I received the packet for updating the position!\n");
+						RakNet::BitStream bsIn(receivedPacket->data,receivedPacket->length,false);
+						bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+						float posx, posy;
+						bsIn.Read(posx); bsIn.Read(posy);
+						printf("New position: %f %f\n",posx,posy);
+						player->setPosition(posx,posy);
 					}
 					break;
 				default:

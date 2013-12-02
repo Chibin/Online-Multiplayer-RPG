@@ -12,14 +12,14 @@ private:
 		float x,y;
 	};
 	position currentPos;
-
 	sf::Clock clock;
-	sf::Texture texture;
+	sf::Texture spriteSheet;
 	sf::Sprite playerSprite;
 
 public:
 	Player(){
 		spritePath = "Images/Lloyd.png";
+		setPosition(50.0,50.0);
 	}
 	void playerInit(std::string playerName=""){
 			if(playerName == ""){
@@ -34,13 +34,11 @@ public:
 	void setName(std::string _name) { name = _name;}
 	std::string getName() { std::cout << "returning the name: " << name << std::endl; return name;}
 	void draw(sf::RenderWindow &window){
-		int x = 1,y = 0;
-			sf::IntRect test(0+24*x,0+32*y,24,32);
-			if( clock.getElapsedTime().asMilliseconds() > 450){
-				clock.restart();
-				x = x < 2? x+1:0;
-			}
-			//playerSprite.setTextureRect(test);
+			playerSprite.setPosition(currentPos.x,currentPos.y);
+			printf("%f %f \n",currentPos.x,currentPos.y);
+			spriteSheet.loadFromFile(spritePath);
+			playerSprite.setTexture(spriteSheet);
+			window.draw(playerSprite);
 	}
 	position getPosition(){
 		return currentPos;
@@ -49,6 +47,17 @@ public:
 		currentPos.x = _x;
 		currentPos.y = _y;
 	}
-
+	void move(float _x, float _y){
+		currentPos.x += _x;
+		currentPos.y += _y;
+	}
+	void loadTexture(std::string _spritePath=""){
+		if (_spritePath != "")
+			spritePath = _spritePath;
+		if (!spriteSheet.loadFromFile(spritePath)){
+			std::cout << "cannot load the image" << std::endl;
+		}
+		playerSprite.setTexture(spriteSheet);
+	}
 };
 #endif
