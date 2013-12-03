@@ -97,7 +97,7 @@ class clientPacketHandler : public packetHandler{
 						bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 						float posx, posy;
 						bsIn.Read(posx); bsIn.Read(posy);
-						printf("New position: %f %f\n",posx,posy);
+						//printf("New position: %f %f\n",posx,posy);
 						player->setPosition(posx,posy);
 					}
 					break;

@@ -15,11 +15,13 @@ private:
 	sf::Clock clock;
 	sf::Texture spriteSheet;
 	sf::Sprite playerSprite;
+	int currentFrame;
 
 public:
 	Player(){
 		spritePath = "Images/Lloyd.png";
 		setPosition(50.0,50.0);
+		currentFrame = 0;
 	}
 	void playerInit(std::string playerName=""){
 			if(playerName == ""){
@@ -35,9 +37,15 @@ public:
 	std::string getName() { std::cout << "returning the name: " << name << std::endl; return name;}
 	void draw(sf::RenderWindow &window){
 			playerSprite.setPosition(currentPos.x,currentPos.y);
-			printf("%f %f \n",currentPos.x,currentPos.y);
+			//printf("%f %f \n",currentPos.x,currentPos.y);
 			spriteSheet.loadFromFile(spritePath);
-			playerSprite.setTexture(spriteSheet);
+			//playerSprite.setTexture(spriteSheet);
+			sf::IntRect test(0+24*currentFrame,0+32*0,24,32);
+			if( clock.getElapsedTime().asMilliseconds() > 450){
+				clock.restart();
+				currentFrame = currentFrame < 2? currentFrame+1:0;
+			}
+			playerSprite.setTextureRect(test);
 			window.draw(playerSprite);
 	}
 	position getPosition(){

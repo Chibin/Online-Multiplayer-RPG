@@ -151,11 +151,12 @@ public:
 		int y;
 		if (event.type == sf::Event::KeyReleased){
 			if (event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::RShift)	isShiftDown = false;
-			if(event.key.code == sf::Keyboard::Up)	isUp = false;
-			if(event.key.code == sf::Keyboard::Down)	isDown = false;
-			if(event.key.code == sf::Keyboard::Left)	isLeft = false;
-			if(event.key.code == sf::Keyboard::Right)	isRight = false;
+			if(event.key.code == sf::Keyboard::Up) { isUp = false; printf("UP release\n");}
+			if(event.key.code == sf::Keyboard::Down)	{ isDown = false;  printf("DOWN release\n");}
+			if(event.key.code == sf::Keyboard::Left) { isLeft = false;  printf("LEFT release\n");}
+			if(event.key.code == sf::Keyboard::Right)	{isRight = false; printf("RIGHT release\n"); }
 		}
+		
 		if (event.type == sf::Event::KeyPressed){
 			window.setKeyRepeatEnabled(repeat);
 			if (event.key.code == sf::Keyboard::Return){
@@ -189,12 +190,16 @@ public:
 			else if(event.key.code == sf::Keyboard::Down){ y = 2;	isDown = true;}
 			else if(event.key.code == sf::Keyboard::Left){ isLeft = true; y = 3;	}
 			else if(event.key.code == sf::Keyboard::Right){ isRight = true;  y = 1; }
-			std::cout << event.type << " " <<keypressToChar(event.key.code) << std::endl;
+			else std::cout << event.type << " " <<keypressToChar(event.key.code) << std::endl;
 		}
 		//-----------
 		//character calculations: Request to move the character
 		//------------
-		if(isUp || isDown || isLeft || isRight) {//player.move(0,-3);
+		if(isUp) printf("UP!\n");
+		if(isDown) printf("isDown!\n");
+		if(isLeft) printf("isLeft!\n");
+		if(isRight) printf("isRight!\n");
+		if(isUp==true || isDown==true || isLeft==true || isRight==true) {//player.move(0,-3);
 			BitStream bsOut;
 			bsOut.Write((RakNet::MessageID)REQUEST_FOR_PLAYER_TO_MOVE);
 			std::string playerName = player->getName().c_str();
