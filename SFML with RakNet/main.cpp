@@ -75,6 +75,7 @@ int main()
 				if (event.type == sf::Event::Closed) window.close();
 			}
 		}
+		user->requestsToServer();
 		//------------
 		// Client stuff for drawing
 		//------------

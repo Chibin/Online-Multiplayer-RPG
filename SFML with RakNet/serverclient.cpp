@@ -35,6 +35,7 @@ private:
 	RakNet::SocketDescriptor* sd;
 	packetManager packet_manager;
 	Player* player;
+	std::map<std::string, Player> otherPlayers;
 	ServerDataContainer* serverData; //Should only 1 that exist
 	//From main 
 	bool isUp,isDown,isLeft,isRight, repeat, isShiftDown, isChatting;
@@ -143,8 +144,31 @@ public:
 
 	void drawManager(sf::RenderWindow &window){
 		//std::cout << player->getName() << std::endl;
+		std::map<std::string, Player>::iterator it;
+		for (it = otherPlayers.begin(); it !=otherPlayers.end(); it++){
+			it->second.draw(window);
+		}
 		if(player != NULL){
 			player->draw(window);
+		}
+	}
+	void requestsToServer(){
+			//-----------
+		//character calculations: Request to move the character
+		//------------
+		if(isUp) printf("UP!\n");
+		if(isDown) printf("isDown!\n");
+		if(isLeft) printf("isLeft!\n");
+		if(isRight) printf("isRight!\n");
+		if( (isUp==true) || (isDown==true) || (isLeft==true) || (isRight==true) ) {//player.move(0,-3);
+			BitStream bsOut;
+			bsOut.Write((RakNet::MessageID)REQUEST_FOR_PLAYER_TO_MOVE);
+			std::string playerName = player->getName().c_str();
+			unsigned short strlength = (unsigned short)strlen(playerName.c_str());
+			bsOut.Write(strlength);
+			bsOut.Write(playerName.c_str(),strlength);
+			bsOut.Write(isUp); bsOut.Write(isDown); bsOut.Write(isLeft); bsOut.Write(isRight);
+			peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,RakNet::UNASSIGNED_SYSTEM_ADDRESS,true);	
 		}
 	}
 	void inputHandler(sf::Event &event, sf::RenderWindow &window){
@@ -191,23 +215,6 @@ public:
 			else if(event.key.code == sf::Keyboard::Left){ isLeft = true; y = 3;	}
 			else if(event.key.code == sf::Keyboard::Right){ isRight = true;  y = 1; }
 			else std::cout << event.type << " " <<keypressToChar(event.key.code) << std::endl;
-		}
-		//-----------
-		//character calculations: Request to move the character
-		//------------
-		if(isUp) printf("UP!\n");
-		if(isDown) printf("isDown!\n");
-		if(isLeft) printf("isLeft!\n");
-		if(isRight) printf("isRight!\n");
-		if(isUp==true || isDown==true || isLeft==true || isRight==true) {//player.move(0,-3);
-			BitStream bsOut;
-			bsOut.Write((RakNet::MessageID)REQUEST_FOR_PLAYER_TO_MOVE);
-			std::string playerName = player->getName().c_str();
-			unsigned short strlength = (unsigned short)strlen(playerName.c_str());
-			bsOut.Write(strlength);
-			bsOut.Write(playerName.c_str(),strlength);
-			bsOut.Write(isUp); bsOut.Write(isDown); bsOut.Write(isLeft); bsOut.Write(isRight);
-			peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,RakNet::UNASSIGNED_SYSTEM_ADDRESS,true);	
 		}
 	}
 	void packetManager(){
