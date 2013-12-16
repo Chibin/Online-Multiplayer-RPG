@@ -90,6 +90,7 @@ int main()
 			window.display();
 		}
 		if(isServer){
+		}
 	}
 	//------------------------------
 	RakNet::RakPeerInterface::DestroyInstance(peer);
