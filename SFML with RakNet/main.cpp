@@ -26,8 +26,6 @@ int main()
 	bool isUp,isDown,isLeft,isRight;
 	isUp = isDown = isLeft = isRight = false;
 	//------------------
-	int x,y;
-	x = y = 0;
 	std::vector<std::string> chatLog;
 	serverclient *user = new serverclient();
 	RakNet::RakPeerInterface *peer = user->peer;
@@ -38,43 +36,16 @@ int main()
 	user->setChatlog();
 	sf::RenderWindow window(sf::VideoMode(800, 600,32), "SFML window",1);
 	if (isServer) window.close();
-	sf::Clock clock;
-	sf::Time time;
 	 // Create a graphical text to display
-	sf::Font font;
-	if (!font.loadFromFile("Book Antiqua.ttf"))
-		return EXIT_FAILURE;
-	sf::Text chatText("",font,25);
-	sf::Text sentText("",font,25);
-	sf::Text chatCheck("Chat: off",font,17);
-	chatCheck.setPosition(0,550);
-	chatText.setPosition(0,565);
-	sf::Texture texture;
-	if (!texture.loadFromFile("Images/Lloyd.png"))
-	{
-		std::cout << "cannot load the image" << std::endl;
-	}
-	sf::Sprite player(texture);
-	player.setScale(2.0f,2.0f);
 	float a = 0;
 	bool repeat = true;
-	bool isShiftDown = false;
-	bool isChatting = false;
 	
 	window.setFramerateLimit(30);
 	while (window.isOpen() || isServer)
 	{
 		user->packetManager();
 		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			// Close window : exit
-			user->inputHandler(event, window);
-			if (event.type == sf::Event::KeyPressed){
-				window.setKeyRepeatEnabled(repeat);
-				if (event.type == sf::Event::Closed) window.close();
-			}
-		}
+		while (window.pollEvent(event)) user->inputHandler(event, window);
 		user->requestsToServer();
 		//------------
 		// Client stuff for drawing
@@ -82,14 +53,7 @@ int main()
 		if(!isServer){
 			window.clear();
 			user->drawManager(window);
-			//window.draw(chatCheck);
-			if(chatLog.size() > 0)
-				sentText.setString(chatLog[chatLog.size()-1]);
-			//window.draw(sentText);
-			//window.draw(chatText);
 			window.display();
-		}
-		if(isServer){
 		}
 	}
 	//------------------------------

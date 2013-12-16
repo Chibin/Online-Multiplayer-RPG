@@ -81,6 +81,10 @@ private:
 	}
 public:
 	serverclient(){
+		packet = NULL;
+		sd = NULL;
+		player = NULL;
+		serverData = NULL;
 		peer = RakNet::RakPeerInterface::GetInstance();
 		serverclientInit();
 	}
@@ -133,7 +137,7 @@ public:
 				peer->SetMaximumIncomingConnections(MAX_CLIENTS);
 			} else {
 				printf("Enter server IP or hit enter for 127.0.0.1\n");
-				std::cin >> str;
+				gets(str);
 				if (str[0]==0){
 					strcpy(str, "127.0.0.1");
 				}
@@ -145,10 +149,8 @@ public:
 	bool getIsServer(){ return isServer;}
 
 	void drawManager(sf::RenderWindow &window){
-		//std::cout << player->getName() << std::endl;
 		std::map<std::string, Player>::iterator it;
 		for (it = otherPlayers.begin(); it !=otherPlayers.end(); it++){
-			printf("I AM NOT ALONE!!!\n");
 			it->second.draw(window);
 		}
 		if(player != NULL){
