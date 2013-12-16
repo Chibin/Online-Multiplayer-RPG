@@ -73,6 +73,7 @@ class serverPacketHandler : public packetHandler{
 						temp = serverData->getPlayer(newPlayer.getName());
 						printf("%s \n",serverData->getPlayer(newPlayer.getName())->getName());
 						printf("Temp: %s \n",temp->getName());
+						printf("Temp: %s \n",temp->getSpritePath().c_str());
 						bsOut.Write(temp->getName().c_str());
 						bsOut.Write(temp->getSpritePath().c_str());
 						peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,receivedPacket->systemAddress,false);	
@@ -85,23 +86,34 @@ class serverPacketHandler : public packetHandler{
 						bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 						//Order: up down left right
 						bool up, down, left, right;
-						unsigned short strlength;
-						char* playerName;
-						bsIn.Read(strlength); bsIn.Read(playerName,strlength); bsIn.Read(up); bsIn.Read(down); bsIn.Read(left); bsIn.Read(right); 
-						printf("test %s!!!\n",playerName);
-						Player *modifyPlayer = serverData->getPlayer(playerName);
+						RakNet::RakString playerName;
+						bsIn.Read(playerName); bsIn.Read(up); bsIn.Read(down); bsIn.Read(left); bsIn.Read(right); 
+						printf("test %s!!!\n",playerName.C_String());
+						Player *modifyPlayer = serverData->getPlayer(playerName.C_String());
 						if(modifyPlayer != NULL){
-							if(up) { printf("UP"); modifyPlayer->move(0,-3);}
-							if(down) { printf("down");modifyPlayer->move(0,3);}
-							if(left) { printf("left");modifyPlayer->move(-3,-0);}
-							if(right) { printf("right");modifyPlayer->move(3,0);}
+							if(up) { modifyPlayer->move(0,-3);}
+							if(down) { modifyPlayer->move(0,3);}
+							if(left) { modifyPlayer->move(-3,-0);}
+							if(right) {modifyPlayer->move(3,0);}
 							printf("%f %f\n",modifyPlayer->getPosition().x,modifyPlayer->getPosition().y);
 							//Sending an update of player position
 							RakNet::BitStream bsOut;
 							bsOut.Write((RakNet::MessageID)UPDATE_PLAYER_POSITION);
 							bsOut.Write((float)modifyPlayer->getPosition().x);
 							bsOut.Write((float)modifyPlayer->getPosition().y);
-							peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,receivedPacket->systemAddress,false);	
+							peer->Send(&bsOut,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,0,receivedPacket->systemAddress,false);
+							
+							RakNet::BitStream bsOut2;
+							bsOut2.Write((RakNet::MessageID)UPDATE_OTHER_PLAYER);
+							bsOut2.Write((float)modifyPlayer->getPosition().x);
+							bsOut2.Write((float)modifyPlayer->getPosition().y);
+							RakNet::RakString thename("%s",modifyPlayer->getName());
+							printf("PLAYERNAME IS %s\n",modifyPlayer->getName());
+							RakNet::RakString thespritepath("%s",modifyPlayer->getSpritePath().c_str());
+							printf("Spritepath IS %s\n",modifyPlayer->getSpritePath().c_str());
+							bsOut2.Write(playerName);
+							bsOut2.Write(thespritepath);
+							peer->Send(&bsOut2,HIGH_PRIORITY,UNRELIABLE_SEQUENCED,0,receivedPacket->systemAddress,true);
 						}
 					}
 					break;

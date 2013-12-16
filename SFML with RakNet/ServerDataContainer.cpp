@@ -13,7 +13,6 @@ private:
 
 public:
 	ServerDataContainer(){
-	//listOfPlayers = new std::map<std::string,Player>();
 	}
 
 	Player* getPlayer(std::string username){

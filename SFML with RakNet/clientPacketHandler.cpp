@@ -15,6 +15,7 @@ class clientPacketHandler : public packetHandler{
 		 */
 	public:
 		std::vector<std::string> *chatlog;
+		std::map<std::string, Player> *otherPlayers;
 		clientPacketHandler(RakNet::RakPeerInterface *_peer){
 			this->peer=_peer;
 	}
@@ -88,6 +89,7 @@ class clientPacketHandler : public packetHandler{
 						bsIn.Read(rs);
 						printf("Image path is %s!\n",rs.C_String());
 						player->loadTexture(rs.C_String());
+						player->setSpritePath(rs.C_String());
 					}
 					break;
 				case UPDATE_PLAYER_POSITION:
@@ -99,6 +101,32 @@ class clientPacketHandler : public packetHandler{
 						bsIn.Read(posx); bsIn.Read(posy);
 						//printf("New position: %f %f\n",posx,posy);
 						player->setPosition(posx,posy);
+					}
+					break;
+				case UPDATE_OTHER_PLAYER:
+					{
+						printf("Updating other players!!!\n");
+						RakNet::BitStream bsIn(receivedPacket->data,receivedPacket->length,false);
+						bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+						char* thesprite;
+						float posx, posy;
+						int directionFaced;
+						unsigned short strlength,strlength2;
+						RakNet::RakString thename,thespritepath;
+						//bsIn.Read(strlength);	
+						bsIn.Read(posx);
+						bsIn.Read(posy);
+						bsIn.Read(thename);
+						bsIn.Read(thespritepath);
+						Player newPlayer;
+						newPlayer.setName(thename.C_String());
+						newPlayer.setSpritePath(thespritepath.C_String());
+						newPlayer.setPosition(posx,posy);
+						if(otherPlayers != NULL){
+							(*otherPlayers)[thename.C_String()]=newPlayer;
+							(*otherPlayers)[thename.C_String()].loadTexture(thespritepath.C_String());
+						}
+						printf("New position: %f %f %s %s\n",posx,posy,thename.C_String(),thespritepath.C_String());
 					}
 					break;
 				default:

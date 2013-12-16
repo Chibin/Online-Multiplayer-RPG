@@ -37,7 +37,6 @@ private:
 	Player* player;
 	std::map<std::string, Player> otherPlayers;
 	ServerDataContainer* serverData; //Should only 1 that exist
-	//From main 
 	bool isUp,isDown,isLeft,isRight, repeat, isShiftDown, isChatting;
 	sf::Font font;
 	sf::Text chatText;
@@ -74,9 +73,11 @@ private:
 		//Packet Handling classes inited
 		//---------------------------------------
 		packet_manager.init(peer,isServer,player);
-		serverData = new ServerDataContainer();
+		if(isServer) serverData = new ServerDataContainer();
 		if(serverData != NULL) packet_manager.setServerData(serverData);
 		else std::cout << "SERVER DATA IS NULL" << std::endl;
+		printf("I GET HERE\n");
+		if(!isServer) packet_manager.getClientPacketHandler()->otherPlayers = &otherPlayers;
 	}
 public:
 	serverclient(){
@@ -132,41 +133,49 @@ public:
 				peer->SetMaximumIncomingConnections(MAX_CLIENTS);
 			} else {
 				printf("Enter server IP or hit enter for 127.0.0.1\n");
-				gets(str);
+				std::cin >> str;
 				if (str[0]==0){
 					strcpy(str, "127.0.0.1");
 				}
 				printf("Starting the client.\n");
+				printf("IP being used is: %s\n",str);
 				peer->Connect(str, SERVER_PORT, 0,0);
 			}
-		}
+	}
 	bool getIsServer(){ return isServer;}
 
 	void drawManager(sf::RenderWindow &window){
 		//std::cout << player->getName() << std::endl;
 		std::map<std::string, Player>::iterator it;
 		for (it = otherPlayers.begin(); it !=otherPlayers.end(); it++){
+			printf("I AM NOT ALONE!!!\n");
 			it->second.draw(window);
 		}
 		if(player != NULL){
 			player->draw(window);
 		}
+		window.draw(chatCheck);
+		if(chatlog->size() > 0) sentText.setString((*chatlog)[chatlog->size()-1]);
+		window.draw(sentText);
+		window.draw(chatText);
+	}
+	void sendUpdates(){
+		/*	BitStream bsOut;
+			bsOut.Write((RakNet::MessageID)ID_GAME_MESSAGE_1);
+			bsOut.Write("testing");
+			peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,RakNet::UNASSIGNED_SYSTEM_ADDRESS,true);	
+			*/
 	}
 	void requestsToServer(){
-			//-----------
+		//-----------
 		//character calculations: Request to move the character
 		//------------
-		if(isUp) printf("UP!\n");
-		if(isDown) printf("isDown!\n");
-		if(isLeft) printf("isLeft!\n");
-		if(isRight) printf("isRight!\n");
-		if( (isUp==true) || (isDown==true) || (isLeft==true) || (isRight==true) ) {//player.move(0,-3);
+		if( (isUp==true) || (isDown==true) || (isLeft==true) || (isRight==true) ) {
 			BitStream bsOut;
 			bsOut.Write((RakNet::MessageID)REQUEST_FOR_PLAYER_TO_MOVE);
-			std::string playerName = player->getName().c_str();
-			unsigned short strlength = (unsigned short)strlen(playerName.c_str());
-			bsOut.Write(strlength);
-			bsOut.Write(playerName.c_str(),strlength);
+			RakNet::RakString playerName("%s",player->getName());
+			printf("PLAYERNAME IS %s",playerName.C_String());
+			bsOut.Write(playerName);
 			bsOut.Write(isUp); bsOut.Write(isDown); bsOut.Write(isLeft); bsOut.Write(isRight);
 			peer->Send(&bsOut,HIGH_PRIORITY,RELIABLE_ORDERED,0,RakNet::UNASSIGNED_SYSTEM_ADDRESS,true);	
 		}

@@ -82,20 +82,14 @@ int main()
 		if(!isServer){
 			window.clear();
 			user->drawManager(window);
-			window.draw(chatCheck);
+			//window.draw(chatCheck);
 			if(chatLog.size() > 0)
 				sentText.setString(chatLog[chatLog.size()-1]);
-			window.draw(sentText);
-			window.draw(chatText);
-	//		sf::IntRect test(0+24*x,0+32*y,24,32);
-		//	if( clock.getElapsedTime().asMilliseconds() > 450){
-		//		clock.restart();
-		//		x = x < 2? x+1:0;
-	//		}
-	//		player.setTextureRect(test);
-			//window.draw(player);
+			//window.draw(sentText);
+			//window.draw(chatText);
 			window.display();
 		}
+		if(isServer){
 	}
 	//------------------------------
 	RakNet::RakPeerInterface::DestroyInstance(peer);

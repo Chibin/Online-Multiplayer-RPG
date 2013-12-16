@@ -30,6 +30,9 @@ public:
 			}
 			name = playerName;
 	}
+	void setSpritePath(std::string _newPath){
+		spritePath = _newPath;
+	}
 	std::string getSpritePath(){
 		return spritePath;
 	}
@@ -37,9 +40,7 @@ public:
 	std::string getName() { std::cout << "returning the name: " << name << std::endl; return name;}
 	void draw(sf::RenderWindow &window){
 			playerSprite.setPosition(currentPos.x,currentPos.y);
-			//printf("%f %f \n",currentPos.x,currentPos.y);
 			spriteSheet.loadFromFile(spritePath);
-			//playerSprite.setTexture(spriteSheet);
 			sf::IntRect test(0+24*currentFrame,0+32*0,24,32);
 			if( clock.getElapsedTime().asMilliseconds() > 450){
 				clock.restart();
@@ -50,6 +51,9 @@ public:
 	}
 	position getPosition(){
 		return currentPos;
+	}
+	int getDirection(){
+		return currentFrame;
 	}
 	void setPosition(float _x, float _y){
 		currentPos.x = _x;
