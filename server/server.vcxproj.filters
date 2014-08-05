@@ -1,25 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{13520621-c6c4-4153-ac32-0f72c9c4c86b}</UniqueIdentifier>
     </Filter>
     <Filter Include="RakNet">
-      <UniqueIdentifier>{bba9a768-f90e-45b6-8249-f866dc27b7f1}</UniqueIdentifier>
+      <UniqueIdentifier>{d3588240-246e-418b-a69a-23cd8a209bbd}</UniqueIdentifier>
     </Filter>
     <Filter Include="RakNet\Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+      <UniqueIdentifier>{dcb45c9f-60f6-40a8-8d86-cb881138492a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{adf72464-2f05-40fa-b307-10251d701105}</UniqueIdentifier>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{d70cba96-0c9c-47b9-9606-4263289c7a5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.cpp">
-      <Filter>RakNet</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Libraries\RakNet_PC-4.037\Source\BitStream.cpp">
       <Filter>RakNet</Filter>
     </ClCompile>
@@ -302,6 +297,15 @@
     <ClCompile Include="..\..\..\Libraries\RakNet_PC-4.037\Source\WSAStartupSingleton.cpp">
       <Filter>RakNet</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.cpp">
+      <Filter>RakNet</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDataContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="serverPacketHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="clientKeyEventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -309,6 +313,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="functionUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyPressToChars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -323,20 +333,11 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ServerDataContainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="serverclient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="serverPacketHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.h">
-      <Filter>RakNet</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\AutopatcherPatchContext.h">
       <Filter>RakNet</Filter>
     </ClInclude>
@@ -649,10 +650,10 @@
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\Rand.h">
       <Filter>RakNet</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\rdlmalloc.h">
+    <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\rdlmalloc-options.h">
       <Filter>RakNet</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\rdlmalloc-options.h">
+    <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\rdlmalloc.h">
       <Filter>RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\ReadyEvent.h">
@@ -776,6 +777,9 @@
       <Filter>RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\XBox360Includes.h">
+      <Filter>RakNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.h">
       <Filter>RakNet</Filter>
     </ClInclude>
     <ClInclude Include="serverclient.h">

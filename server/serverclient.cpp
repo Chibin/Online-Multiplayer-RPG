@@ -52,23 +52,10 @@ private:
 		chatCheck.setFont(font); chatCheck.setCharacterSize(17); chatCheck.setString("Chat: off");
 		chatCheck.setPosition(0,550);
 		chatText.setPosition(0,565);
-		printf("(C) or (S)erver?\n");
-		gets(str);
-		if ((str[0]=='c')||(str[0]=='C'))
-		{
-			sd = new RakNet::SocketDescriptor();
-			peer->Startup(1,*&sd, 1);
-			isServer = false;
-			//=========
-			//player setup
-			//=========
-			player = new Player();
-			player->playerInit();
-		} else {
-			sd = new RakNet::SocketDescriptor(SERVER_PORT,0);
-			peer->Startup(MAX_CLIENTS, *&sd, 1);
-			isServer = true;
-		}
+		sd = new RakNet::SocketDescriptor(SERVER_PORT,0);
+		peer->Startup(MAX_CLIENTS, *&sd, 1);
+		isServer = true;
+		
 		//---------------------------------------
 		//Packet Handling classes inited
 		//---------------------------------------
@@ -131,20 +118,11 @@ public:
 			packet_manager.getClientPacketHandler()->setChatlog(chatlog);
 	}
 	void serverclientConnectionStart(){
-			if (isServer)
-			{
-				printf("Starting the server.\n");
-				peer->SetMaximumIncomingConnections(MAX_CLIENTS);
-			} else {
-				printf("Enter server IP or hit enter for 127.0.0.1\n");
-				gets(str);
-				if (str[0]==0){
-					strcpy(str, "127.0.0.1");
-				}
-				printf("Starting the client.\n");
-				printf("IP being used is: %s\n",str);
-				peer->Connect(str, SERVER_PORT, 0,0);
-			}
+		if (isServer)
+		{
+			printf("Starting the server.\n");
+			peer->SetMaximumIncomingConnections(MAX_CLIENTS);
+		} 
 	}
 	bool getIsServer(){ return isServer;}
 
