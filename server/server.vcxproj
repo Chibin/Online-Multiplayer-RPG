@@ -114,8 +114,6 @@
     <ClCompile Include="..\..\..\Libraries\RakNet_PC-4.037\Source\VitaIncludes.cpp" />
     <ClCompile Include="..\..\..\Libraries\RakNet_PC-4.037\Source\WSAStartupSingleton.cpp" />
     <ClCompile Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.cpp" />
-    <ClCompile Include="clientKeyEventHandler.cpp" />
-    <ClCompile Include="clientPacketHandler.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="functionUtilities.cpp" />
     <ClCompile Include="KeyPressToChars.cpp" />
@@ -123,7 +121,7 @@
     <ClCompile Include="packetHandler.cpp" />
     <ClCompile Include="packetManager.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="serverclient.cpp" />
+    <ClCompile Include="server.cpp" />
     <ClCompile Include="ServerDataContainer.cpp" />
     <ClCompile Include="serverPacketHandler.cpp" />
   </ItemGroup>
@@ -276,7 +274,7 @@
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\WSAStartupSingleton.h" />
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.h" />
-    <ClInclude Include="serverclient.h" />
+    <ClInclude Include="server.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Libraries\RakNet_PC-4.037\Source\CMakeLists.txt" />

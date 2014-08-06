@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "serverclient.cpp"
+#include "server.cpp"
 #include "RakPeerInterface.h"
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
@@ -20,33 +20,17 @@ using namespace RakNet;
 
 int main()
 {
-	//------------------
-	//controls
-	//------------------
-	bool isUp,isDown,isLeft,isRight;
-	isUp = isDown = isLeft = isRight = false;
+
 	//------------------
 	std::vector<std::string> chatLog;
 	serverclient *user = new serverclient();
 	RakNet::RakPeerInterface *peer = user->peer;
-	bool isServer = user->getIsServer();
 	RakNet::Packet *packet;
-	user->serverclientConnectionStart();
-	user->chatlog = &chatLog;
-	user->setChatlog();
-	sf::RenderWindow window(sf::VideoMode(800, 600,32), "SFML window",1);
-	window.close();
+	user->serverConnectionStart();
 	 // Create a graphical text to display
-	float a = 0;
-	bool repeat = true;
-	
-	window.setFramerateLimit(30);
 	while (true)
 	{
 		user->packetManager();
-		sf::Event event;
-		while (window.pollEvent(event)) user->inputHandler(event, window);
-		user->requestsToServer();
 	}
 	//------------------------------
 	RakNet::RakPeerInterface::DestroyInstance(peer);
