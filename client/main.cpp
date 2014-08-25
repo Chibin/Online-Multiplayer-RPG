@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "serverclient.cpp"
+#include "src/serverclient.cpp"
 #include "RakPeerInterface.h"
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
@@ -8,7 +8,7 @@
 #include <time.h>
 #include <iostream>
 #include <vector>
-#include "packetHandler.cpp"
+#include "src/packetHandler.cpp"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
