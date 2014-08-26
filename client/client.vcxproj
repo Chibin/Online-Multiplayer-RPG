@@ -124,8 +124,6 @@
     <ClCompile Include="src\packetHandler.cpp" />
     <ClCompile Include="src\packetManager.cpp" />
     <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\ServerDataContainer.cpp" />
-    <ClCompile Include="src\serverPacketHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\AutopatcherPatchContext.h" />
@@ -277,6 +275,7 @@
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\XBox360Includes.h" />
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.h" />
     <ClInclude Include="src\client.h" />
+    <ClInclude Include="src\packetManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Libraries\RakNet_PC-4.037\Source\CMakeLists.txt" />

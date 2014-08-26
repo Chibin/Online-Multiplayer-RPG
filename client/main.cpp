@@ -29,19 +29,17 @@ int main()
 	std::vector<std::string> chatLog;
 	client *user = new client();
 	RakNet::RakPeerInterface *peer = user->peer;
-	bool isServer = user->getIsServer();
 	RakNet::Packet *packet;
 	user->clientConnectionStart();
 	user->chatlog = &chatLog;
 	user->setChatlog();
 	sf::RenderWindow window(sf::VideoMode(800, 600,32), "SFML window",1);
-	if (isServer) window.close();
 	 // Create a graphical text to display
 	float a = 0;
 	bool repeat = true;
 	
 	window.setFramerateLimit(30);
-	while (window.isOpen() || isServer)
+	while (window.isOpen())
 	{
 		user->packetManager();
 		sf::Event event;
@@ -50,11 +48,9 @@ int main()
 		//------------
 		// Client stuff for drawing
 		//------------
-		if(!isServer){
-			window.clear();
-			user->drawManager(window);
-			window.display();
-		}
+		window.clear();
+		user->drawManager(window);
+		window.display();
 	}
 	//------------------------------
 	RakNet::RakPeerInterface::DestroyInstance(peer);

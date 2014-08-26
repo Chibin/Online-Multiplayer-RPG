@@ -24,39 +24,25 @@ void client::clientInit(){
 	chatCheck.setFont(font); chatCheck.setCharacterSize(17); chatCheck.setString("Chat: off");
 	chatCheck.setPosition(0,550);
 	chatText.setPosition(0,565);
-	printf("(C) or (S)erver?\n");
-	gets(str);
-	if ((str[0]=='c')||(str[0]=='C'))
-	{
-		sd = new RakNet::SocketDescriptor();
-		peer->Startup(1,*&sd, 1);
-		isServer = false;
-		//=========
-		//player setup
-		//=========
-		player = new Player();
-		player->playerInit();
-	} else {
-		sd = new RakNet::SocketDescriptor(SERVER_PORT,0);
-		peer->Startup(MAX_CLIENTS, *&sd, 1);
-		isServer = true;
-	}
+	printf("Starting client...\n");
+	sd = new RakNet::SocketDescriptor();
+	peer->Startup(1,*&sd, 1);
+	//=========
+	//player setup
+	//=========
+	player = new Player();
+	player->playerInit();
 	//---------------------------------------
 	//Packet Handling classes inited
 	//---------------------------------------
-	packet_manager.init(peer,isServer,player);
-	if(isServer) serverData = new ServerDataContainer();
-	if(serverData != NULL) packet_manager.setServerData(serverData);
-	else std::cout << "SERVER DATA IS NULL" << std::endl;
-	printf("I GET HERE\n");
-	if(!isServer) packet_manager.getClientPacketHandler()->otherPlayers = &otherPlayers;
+	packet_manager.init(peer,player);
+	packet_manager.getClientPacketHandler()->otherPlayers = &otherPlayers;
 }
 
 client::client(){
 	packet = NULL;
 	sd = NULL;
 	player = NULL;
-	serverData = NULL;
 	peer = RakNet::RakPeerInterface::GetInstance();
 	clientInit();
 }
@@ -102,28 +88,20 @@ char client::keypressToChar(sf::Keyboard::Key keypressed, bool isShiftPressed=fa
 }
 
 void client::setChatlog(){
-	if(chatlog != NULL && (!isServer))
+	if(chatlog != NULL)
 		packet_manager.getClientPacketHandler()->setChatlog(chatlog);
 }
 
 void client::clientConnectionStart(){
-		if (isServer)
-		{
-			printf("Starting the server.\n");
-			peer->SetMaximumIncomingConnections(MAX_CLIENTS);
-		} else {
-			printf("Enter server IP or hit enter for 127.0.0.1\n");
-			gets(str);
-			if (str[0]==0){
-				strcpy(str, "127.0.0.1");
-			}
-			printf("Starting the client.\n");
-			printf("IP being used is: %s\n",str);
-			peer->Connect(str, SERVER_PORT, 0,0);
+		printf("Enter server IP or hit enter for 127.0.0.1\n");
+		gets(str);
+		if (str[0]==0){
+			strcpy(str, "127.0.0.1");
 		}
+		printf("Starting the client.\n");
+		printf("IP being used is: %s\n",str);
+		peer->Connect(str, SERVER_PORT, 0,0);
 }
-
-bool client::getIsServer(){ return isServer;}
 
 void client::drawManager(sf::RenderWindow &window){
 	std::map<std::string, Player>::iterator it;
@@ -207,7 +185,7 @@ void client::packetManager(){
 		//Packet Events
 		int packetCounter = 0;
 		while( packet != NULL ) {
-			packet_manager.manager(packet,isServer);
+			packet_manager.manager(packet);
 			if(packet->data[0] == ID_CONNECTION_ATTEMPT_FAILED) {				
 				printf("Trying to reconnect.\n");
 				peer->Connect(str, SERVER_PORT, 0,0);

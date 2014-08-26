@@ -5,7 +5,7 @@
 #include <string>
 #include <stdlib.h>
 #include "RakPeerInterface.h"
-#include "packetManager.cpp"
+#include "packetManager.h"
 #include "Player.cpp"
 
 #define MAX_CLIENTS 10
@@ -20,7 +20,6 @@ class client{
 		packetManager packet_manager;
 		Player* player;
 		std::map<std::string, Player> otherPlayers;
-		ServerDataContainer* serverData; //Should only 1 that exist
 		bool isUp,isDown,isLeft,isRight, repeat, isShiftDown, isChatting;
 		sf::Font font;
 		sf::Text chatText;
@@ -42,7 +41,6 @@ class client{
 		char keypressToChar(sf::Keyboard::Key keypressed, bool isShiftPressed);
 		void setChatlog();
 		void clientConnectionStart();
-		bool getIsServer();
 		void drawManager(sf::RenderWindow &window);
 		void requestsToServer();
 		void inputHandler(sf::Event &event, sf::RenderWindow &window);
