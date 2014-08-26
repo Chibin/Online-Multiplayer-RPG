@@ -61,10 +61,8 @@ public:
 	void setChatlog(){
 	}
 	void serverConnectionStart(){
-		if (isServer) {
-			printf("Starting the server.\n");
-			peer->SetMaximumIncomingConnections(MAX_CLIENTS);
-		} 
+		printf("serverConnectionStart - starting the server.\n");
+		peer->SetMaximumIncomingConnections(MAX_CLIENTS);
 	}
 	bool getIsServer(){ return isServer;}
 

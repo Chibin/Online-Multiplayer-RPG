@@ -330,10 +330,10 @@
     <ClCompile Include="src\ServerDataContainer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\serverclient.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\client.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -782,7 +782,7 @@
     <ClInclude Include="..\..\..\Libraries\RakNet_PC-4.037\Source\_FindFirst.h">
       <Filter>RakNet</Filter>
     </ClInclude>
-    <ClInclude Include="src\serverclient.h">
+    <ClInclude Include="src\client.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
