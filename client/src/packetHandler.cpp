@@ -3,7 +3,7 @@
 #include "RakPeerInterface.h"
 #include "BitStream.h"
 #include "MessageIdentifiers.h"
-#include "Player.cpp"
+#include "Player.h"
 
 //global variable for messages
 	enum GameMessages{

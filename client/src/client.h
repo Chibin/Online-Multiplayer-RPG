@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "RakPeerInterface.h"
 #include "packetManager.h"
-#include "Player.cpp"
+#include "Player.h"
 
 #define MAX_CLIENTS 10
 #define SERVER_PORT 60000

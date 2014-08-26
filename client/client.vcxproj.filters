@@ -315,9 +315,6 @@
     <ClCompile Include="src\functionUtilities.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entity.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\clientPacketHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -780,6 +777,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="src\packetManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
